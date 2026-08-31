@@ -17,14 +17,19 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
   const riskLevel = getRiskLevel(currentCrowd);
   const colors = getStatusColor(riskLevel);
 
-  const strokeWidth = 18;
+  const strokeWidth = 16;
   const radius = (size - strokeWidth * 2) / 2;
   const cx = size / 2;
-  const cy = size / 2 + 20;
+  const cy = size / 2 + 15;
 
   const arcLength = Math.PI * radius;
   const clampedPct = Math.min(Math.max(percentage, 0), 100);
   const strokeDashoffset = arcLength - (clampedPct / 100) * arcLength;
+
+  // Active Needle / Indicator coordinates
+  const currentAngleRad = Math.PI - (clampedPct / 100) * Math.PI;
+  const indicatorX = cx + radius * Math.cos(currentAngleRad);
+  const indicatorY = cy - radius * Math.sin(currentAngleRad);
 
   const trackColor = theme === 'dark' ? '#1E293B' : '#E2E8F0';
   const textColor = theme === 'dark' ? '#F8FAFC' : '#0F172A';
@@ -32,7 +37,7 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
 
   return (
     <div className="flex flex-col items-center justify-center relative select-none">
-      <svg width={size} height={size * 0.68} className="overflow-visible">
+      <svg width={size} height={size * 0.64} className="overflow-visible">
         <defs>
           <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#10B981" />
@@ -66,6 +71,20 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
           }}
         />
 
+        {/* Animated Needle / Dot on Arc */}
+        <circle
+          cx={indicatorX}
+          cy={indicatorY}
+          r={7}
+          fill={colors.fill}
+          stroke={theme === 'dark' ? '#0F172A' : '#FFFFFF'}
+          strokeWidth={2.5}
+          className="transition-all duration-700 ease-out shadow-lg"
+          style={{
+            filter: `drop-shadow(0 0 8px ${colors.fill})`,
+          }}
+        />
+
         {/* Ticks and Labels: 0%, 25%, 50%, 75%, 100% */}
         {[
           { label: '0%', angle: 180 },
@@ -82,7 +101,7 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
           const x2 = cx + tickR2 * Math.cos(Math.PI - rad);
           const y2 = cy - tickR2 * Math.sin(Math.PI - rad);
 
-          const textR = radius + 28;
+          const textR = radius + 27;
           const tx = cx + textR * Math.cos(Math.PI - rad);
           const ty = cy - textR * Math.sin(Math.PI - rad);
 
@@ -114,7 +133,7 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
       </svg>
 
       {/* Center Digital Display */}
-      <div className="text-center -mt-11">
+      <div className="text-center -mt-9">
         <div
           className="text-3xl sm:text-4xl font-black font-mono tracking-tight transition-colors duration-300"
           style={{ color: textColor }}
@@ -122,7 +141,7 @@ export const CrowdGauge: React.FC<CrowdGaugeProps> = ({
           {percentage}%
         </div>
         <div
-          className={`mt-1.5 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider border shadow-sm transition-all ${colors.bg} ${colors.text} ${colors.border}`}
+          className={`mt-1 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-black uppercase tracking-wider border shadow-sm transition-all ${colors.bg} ${colors.text} ${colors.border}`}
         >
           {riskLevel}
         </div>
