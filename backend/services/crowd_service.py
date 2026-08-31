@@ -1,4 +1,4 @@
-﻿from datetime import datetime, date, timedelta
+from datetime import datetime, date, timedelta
 from typing import Optional, List, Dict, Any
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
@@ -227,12 +227,14 @@ def get_gate_analytics(db: Session) -> List[Dict[str, Any]]:
         if ev.camera_id:
             gates_data[gid]["cameras"].add(ev.camera_id)
 
-    # Ensure default gates exist if empty
-    if not gates_data:
-        gates_data = {
-            "GATE_1": {"gate_id": "GATE_1", "entries": 0, "exits": 0, "cameras": {"ENTRY_01", "EXIT_01"}},
-            "GATE_2": {"gate_id": "GATE_2", "entries": 0, "exits": 0, "cameras": {"GATE_2_ENTRY", "GATE_2_EXIT"}}
-        }
+    for g in ["GATE_1", "GATE_2"]:
+        if g not in gates_data:
+            gates_data[g] = {
+                "gate_id": g,
+                "entries": 0,
+                "exits": 0,
+                "cameras": {f"{g}_ENTRY", f"{g}_EXIT"} if g == "GATE_2" else {"ENTRY_01", "EXIT_01"}
+            }
 
     results = []
     for gid, data in sorted(gates_data.items()):
