@@ -1,3 +1,9 @@
 ultralytics>=8.0.0
 opencv-python>=4.8.0
 numpy>=1.23.0
+
+// Backend Packages
+fastapi 
+uvicorn
+sqlalchemy
+pydantic
