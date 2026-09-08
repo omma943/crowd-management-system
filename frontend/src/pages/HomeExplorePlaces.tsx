@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Search,
   MapPin,
@@ -79,41 +79,45 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-gradient-to-b from-cyan-500/10 via-blue-500/5 to-transparent p-6 sm:p-10 shadow-sm">
-        <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
-        <div className="absolute -left-16 -bottom-16 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+      {/* Hero Banner with Official CrowdSafe AI Artwork */}
+      <div className="space-y-6">
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-xl group">
+          <img
+            src="/images/crowdsafe-banner.png"
+            alt="CrowdSafe AI - Safer Crowds, Smarter Tomorrow"
+            className="w-full h-auto max-h-[360px] object-cover sm:object-contain object-center transition-transform duration-700 group-hover:scale-[1.01]"
+          />
+          {/* Subtle Ambient Glow Effect */}
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none" />
+        </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm text-xs font-bold text-cyan-600 dark:text-cyan-400">
-            <Sparkles className="h-4 w-4 text-cyan-500" />
-            <span>AI-Powered Real-Time Density Monitoring</span>
+        {/* Search & Category Filter Section */}
+        <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm space-y-4">
+          <div className="text-center max-w-xl mx-auto space-y-1">
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+              Explore Pilgrimage & Heritage Sites
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+              Real-time crowd density, safety alerts, and AI forecast across Maharashtra
+            </p>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
-            CrowdSafe AI
-          </h1>
-
-          <p className="text-sm sm:text-lg font-medium text-slate-600 dark:text-slate-300">
-            Know the crowd. Plan your visit. Stay safe.
-          </p>
-
           {/* Search Bar */}
-          <div className="pt-2 max-w-xl mx-auto">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+          <div className="max-w-xl mx-auto">
+            <div className="relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-cyan-500 transition-colors" />
               <input
                 type="text"
-                placeholder="🔍 Search temples, tourist places..."
+                placeholder="🔍 Search temples, historic forts, cities, or areas..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-lg focus:border-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 transition-all"
+                className="w-full rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-inner focus:border-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 transition-all font-medium"
               />
             </div>
           </div>
 
           {/* Category Filter Chips */}
-          <div className="pt-2 flex flex-wrap items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
             {[
               { id: 'All', label: '🌟 All Places' },
               { id: 'Temple', label: '🛕 Temples & Pilgrimage' },
@@ -125,7 +129,7 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   categoryFilter === cat.id
                     ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md scale-105'
-                    : 'bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 hover:border-slate-300'
                 }`}
               >
                 {cat.label}
