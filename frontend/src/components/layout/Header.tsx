@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   RefreshCw,
   Activity,
@@ -8,6 +8,7 @@ import {
   Zap,
   MapPin,
   ChevronDown,
+  Menu,
 } from 'lucide-react';
 import { useCrowdData } from '../../context/CrowdContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,11 +18,13 @@ import { LocationSelectorModal } from './LocationSelectorModal';
 interface HeaderProps {
   onOpenSimulator?: () => void;
   onNavigateHome?: () => void;
+  onToggleSidebar?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onOpenSimulator,
   onNavigateHome,
+  onToggleSidebar,
 }) => {
   const { connectionStatus, isRefreshing, refreshData } = useCrowdData();
   const { theme, toggleTheme } = useTheme();
@@ -57,22 +60,34 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#0B0F17]/90 px-4 md:px-6 backdrop-blur-xl transition-colors duration-200">
+      <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#0B0F17]/90 px-3 sm:px-6 backdrop-blur-xl transition-colors duration-200">
         {/* Brand & Persistent Location Selector */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          {/* Mobile Sidebar Toggle Button */}
+          {onToggleSidebar && (
+            <button
+              onClick={onToggleSidebar}
+              className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              title="Open Navigation Menu"
+              aria-label="Toggle navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          )}
+
           {/* Logo */}
           <div
             onClick={onNavigateHome}
-            className="flex items-center gap-2.5 cursor-pointer group"
+            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0"
           >
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-              <Activity className="h-5 w-5" />
+            <div className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+              <Activity className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden md:block">
               <div className="flex items-center gap-1.5">
                 <span className="text-base font-black text-slate-900 dark:text-slate-100 tracking-tight">
                   CrowdSafe AI
@@ -89,14 +104,14 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Persistent Location Selector Button */}
           <button
             onClick={() => setIsLocationModalOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-black text-slate-900 dark:text-slate-100 transition-all shadow-sm hover:scale-105 active:scale-95 group"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-black text-slate-900 dark:text-slate-100 transition-all shadow-sm hover:scale-105 active:scale-95 group min-w-0"
             title="Click to switch monitored place"
           >
-            <MapPin className="h-4 w-4 text-cyan-500 group-hover:animate-bounce" />
-            <span className="max-w-[140px] sm:max-w-[200px] truncate">
+            <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-cyan-500 group-hover:animate-bounce shrink-0" />
+            <span className="max-w-[95px] xs:max-w-[130px] sm:max-w-[180px] md:max-w-[220px] truncate text-[11px] sm:text-xs">
               {selectedPlace.shortName}
             </span>
-            <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+            <ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-slate-400 shrink-0" />
           </button>
         </div>
 
