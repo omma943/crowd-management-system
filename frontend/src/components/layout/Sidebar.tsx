@@ -1,114 +1,157 @@
 ﻿import React from 'react';
 import {
-  LayoutDashboard,
-  Video,
+  Home,
+  Users,
+  Gauge,
+  LifeBuoy,
   BarChart3,
-  ListFilter,
   AlertTriangle,
   Settings,
   Shield,
-  Radio,
+  MapPin,
+  Camera,
 } from 'lucide-react';
-import { useCrowdData } from '../../context/CrowdContext';
+import { usePlace } from '../../context/PlaceContext';
 
-export type NavTab = 'dashboard' | 'live' | 'analytics' | 'events' | 'alerts' | 'settings';
+export type NavItem =
+  | 'home'
+  | 'live-crowd'
+  | 'capacity'
+  | 'help'
+  | 'analytics'
+  | 'alerts'
+  | 'settings';
 
 interface SidebarProps {
-  activeTab: NavTab;
-  setActiveTab: (tab: NavTab) => void;
+  currentTab: NavItem;
+  onSelectTab: (tab: NavItem) => void;
   isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  onClose: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
-  activeTab,
-  setActiveTab,
+  currentTab,
+  onSelectTab,
   isOpen,
-  setIsOpen,
+  onClose,
 }) => {
-  const { alerts } = useCrowdData();
-  const activeAlertCount = alerts.filter(a => a.priority === 'CRITICAL' || a.priority === 'HIGH').length;
+  const { selectedPlace, setIsLocationModalOpen } = usePlace();
 
   const navItems = [
-    { id: 'dashboard' as NavTab, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'live' as NavTab, label: 'Live Monitoring', icon: Video },
-    { id: 'analytics' as NavTab, label: 'Analytics', icon: BarChart3 },
-    { id: 'events' as NavTab, label: 'Events Audit', icon: ListFilter },
-    {
-      id: 'alerts' as NavTab,
-      label: 'Safety Alerts',
-      icon: AlertTriangle,
-      badge: activeAlertCount > 0 ? activeAlertCount : null,
-    },
-    { id: 'settings' as NavTab, label: 'System Settings', icon: Settings },
+    { id: 'home' as NavItem, label: 'Explore Places', icon: Home, badge: 'All' },
+    { id: 'live-crowd' as NavItem, label: 'Live Crowd', icon: Users, badge: 'Live' },
+    { id: 'capacity' as NavItem, label: 'Capacity & Forecast', icon: Gauge, badge: 'AI' },
+    { id: 'help' as NavItem, label: 'Help & Facilities', icon: LifeBuoy, badge: 'SOS' },
+    { id: 'analytics' as NavItem, label: 'Analytics', icon: BarChart3 },
+    { id: 'alerts' as NavItem, label: 'Safety Alerts', icon: AlertTriangle, badge: `${selectedPlace.alerts.length}` },
+    { id: 'settings' as NavItem, label: 'Settings & Cameras', icon: Settings },
   ];
 
   return (
     <>
-      {/* Mobile backdrop */}
+      {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
-          onClick={() => setIsOpen(false)}
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
         />
       )}
 
+      {/* Sidebar container */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0B0F17] transition-all duration-300 md:translate-x-0 shadow-lg md:shadow-none ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-64 border-r border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-[#090D15]/95 backdrop-blur-xl flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        {/* Brand Header */}
-        <div className="flex h-16 items-center gap-3 px-6 border-b border-slate-200 dark:border-slate-800/80">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 dark:bg-cyan-600/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 shadow-sm">
-            <Radio className="h-4 w-4 animate-pulse" />
+        {/* Top Branding & Place Pill */}
+        <div className="p-4 space-y-4">
+          <div className="flex items-center gap-3 px-2 py-1">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20">
+              <Shield className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
+                CrowdSafe AI
+              </h2>
+              <p className="text-[10px] text-slate-400 font-medium">
+                Real-Time Safety & Density
+              </p>
+            </div>
           </div>
-          <div>
-            <span className="font-extrabold text-sm text-slate-900 dark:text-slate-100 tracking-wider">CROWD OPTIX</span>
-            <span className="block text-[10px] text-cyan-600 dark:text-cyan-400 font-mono font-bold">CONTROL ROOM 2.0</span>
+
+          {/* Active Monitored Place Quick Widget */}
+          <div
+            onClick={() => setIsLocationModalOpen(true)}
+            className="p-3 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 dark:bg-cyan-500/10 hover:border-cyan-500/60 transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 mb-1">
+              <span className="flex items-center gap-1">
+                <MapPin className="h-3 w-3" /> ACTIVE PLACE
+              </span>
+              <span className="group-hover:underline">Switch ▾</span>
+            </div>
+            <div className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
+              {selectedPlace.shortName}
+            </div>
+            <div className="mt-1 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
+              <span>{selectedPlace.currentCount.toLocaleString()} inside</span>
+              <span className="font-bold text-cyan-600 dark:text-cyan-400">
+                {Math.round((selectedPlace.currentCount / selectedPlace.baseCapacity) * 100)}%
+              </span>
+            </div>
           </div>
+
+          {/* Navigation Links */}
+          <nav className="space-y-1 pt-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = currentTab === item.id;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    onSelectTab(item.id);
+                    onClose();
+                  }}
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                    isActive
+                      ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/25 font-black'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="h-4 w-4" />
+                    <span>{item.label}</span>
+                  </div>
+
+                  {item.badge && (
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase ${
+                        isActive
+                          ? 'bg-white/20 text-white'
+                          : item.badge === 'SOS'
+                          ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400'
+                          : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="flex-1 space-y-1.5 px-3.5 py-4">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTab(item.id);
-                  setIsOpen(false);
-                }}
-                className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                  isActive
-                    ? 'bg-cyan-500/10 dark:bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/80 hover:text-slate-900 dark:hover:text-slate-200'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Icon className={`h-4 w-4 ${isActive ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-500 dark:text-slate-400'}`} />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge !== null && item.badge !== undefined && (
-                  <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-rose-500/15 dark:bg-rose-500/20 px-1.5 text-xs font-extrabold text-rose-600 dark:text-rose-400 border border-rose-500/40 animate-bounce">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-
-        {/* Creative Privacy Badge Container */}
-        <div className="p-4 m-3.5 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-900/60 backdrop-blur-md shadow-sm">
-          <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1.5 font-bold text-xs">
-            <Shield className="h-4 w-4" />
-            <span className="uppercase tracking-wider">Privacy Engine</span>
+        {/* Footer Privacy & System info */}
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/40 space-y-2 text-[10px] text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
+            <Camera className="h-3.5 w-3.5 text-cyan-500" />
+            <span>Anonymous Optical Telemetry</span>
           </div>
-          <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
-            Strictly anonymous edge person tracking. No biometric or facial recognition data stored.
+          <p className="leading-tight">
+            Strict Zero-Biometrics Policy. Facial recognition disabled by default.
           </p>
         </div>
       </aside>

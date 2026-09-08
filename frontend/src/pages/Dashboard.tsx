@@ -1,142 +1,142 @@
 ﻿import React from 'react';
-import { Users, ArrowDownRight, ArrowUpRight, Award } from 'lucide-react';
+import {
+  Users,
+  ArrowDownRight,
+  ArrowUpRight,
+  Trophy,
+} from 'lucide-react';
 import { useCrowdData } from '../context/CrowdContext';
-import { useSettings } from '../context/SettingsContext';
+import { usePlace } from '../context/PlaceContext';
 import { KpiCard } from '../components/common/KpiCard';
-import { StatusBadge } from '../components/common/StatusBadge';
 import { LiveCrowdCard } from '../components/dashboard/LiveCrowdCard';
 import { CapacityCard } from '../components/dashboard/CapacityCard';
+import { VenueMapCard } from '../components/dashboard/VenueMapCard';
 import { CrowdTrendChart } from '../components/dashboard/CrowdTrendChart';
 import { EntryExitChart } from '../components/dashboard/EntryExitChart';
 import { GateAnalyticsCard } from '../components/dashboard/GateAnalyticsCard';
 import { CameraStatusCard } from '../components/dashboard/CameraStatusCard';
 import { RecentEventsTable } from '../components/dashboard/RecentEventsTable';
-import { VenueMapCard } from '../components/dashboard/VenueMapCard';
-import { LoadingState } from '../components/common/LoadingState';
-import { ErrorState } from '../components/common/ErrorState';
-import type { NavTab } from '../components/layout/Sidebar';
+import { ZoneCrowdCard } from '../components/dashboard/ZoneCrowdCard';
 
-interface DashboardProps {
-  setActiveTab: (tab: NavTab) => void;
-}
-
-export const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
+export const Dashboard: React.FC = () => {
   const {
-    currentCrowd,
-    stats,
     history,
     gates,
     cameras,
     recentEvents,
-    connectionStatus,
-    isLoading,
-    refreshData,
   } = useCrowdData();
 
-  const { getRiskLevel } = useSettings();
-  const riskLevel = getRiskLevel(currentCrowd);
+  const { selectedPlace } = usePlace();
 
-  if (isLoading && !connectionStatus.lastSuccessfulUpdate) {
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <LoadingState type="card" />
-          <LoadingState type="card" />
-          <LoadingState type="card" />
-          <LoadingState type="card" />
-        </div>
-        <LoadingState type="chart" />
-      </div>
-    );
-  }
+  const occupancyPct = Math.round(
+    (selectedPlace.currentCount / selectedPlace.baseCapacity) * 100
+  );
 
   return (
-    <div className="space-y-6">
-      {/* Backend Offline Warning Banner */}
-      {!connectionStatus.isOnline && (
-        <ErrorState
-          title="Backend Connection Offline"
-          message={
-            connectionStatus.errorMessage ||
-            'Unable to connect to the FastAPI crowd monitoring backend on http://127.0.0.1:8000. Retrying in the background...'
-          }
-          onRetry={refreshData}
-        />
-      )}
+    <div className="space-y-6 pb-12">
+      {/* Location Breadcrumb & Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 gap-2">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-950/60 px-2.5 py-0.5 rounded-full border border-cyan-200 dark:border-cyan-500/30 uppercase">
+              {selectedPlace.categoryLabel}
+            </span>
+            <span className="text-xs text-slate-400">• {selectedPlace.city}</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight mt-1">
+            Live Crowd — {selectedPlace.shortName}
+          </h1>
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            Real-time optical density telemetry & spatial zone monitoring
+          </p>
+        </div>
 
-      {/* ================================================== */}
-      {/* 6. MAIN KPI CARDS (TOP OF DASHBOARD)              */}
-      {/* ================================================== */}
+        <div className="flex items-center gap-2">
+          <span
+            className={`px-3 py-1 rounded-full text-xs font-mono font-bold uppercase border ${
+              occupancyPct >= 90
+                ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/30'
+                : occupancyPct >= 70
+                ? 'bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/30'
+                : occupancyPct >= 50
+                ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
+                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+            }`}
+          >
+            {selectedPlace.status} ({occupancyPct}% Capacity)
+          </span>
+        </div>
+      </div>
+
+      {/* 4 Hero KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* 1. CURRENT CROWD (MOST IMPORTANT METRIC) */}
         <KpiCard
           title="CURRENT CROWD"
-          value={`${currentCrowd} People`}
-          subtitle={`Formula: ${stats.entered_today} Entries - ${stats.exited_today} Exits`}
+          value={selectedPlace.currentCount.toLocaleString()}
+          subtitle="People currently inside"
           icon={Users}
           variant="primary"
-          isHighlight={true}
-          badge={<StatusBadge status={riskLevel} size="sm" />}
+          trend={{
+            text: `${occupancyPct}% of safe cap`,
+            isPositive: occupancyPct < 85,
+          }}
         />
 
-        {/* 2. ENTERED TODAY */}
         <KpiCard
           title="ENTERED TODAY"
-          value={stats.entered_today}
-          subtitle="Total unique ingress counts"
+          value={`+${selectedPlace.enteredToday.toLocaleString()}`}
+          subtitle="Total recorded entries"
           icon={ArrowDownRight}
           variant="success"
-          trend={{ text: '+ Inflow Today', isPositive: true }}
         />
 
-        {/* 3. EXITED TODAY */}
         <KpiCard
           title="EXITED TODAY"
-          value={stats.exited_today}
-          subtitle="Total unique egress counts"
+          value={`-${selectedPlace.exitedToday.toLocaleString()}`}
+          subtitle="Total recorded exits"
           icon={ArrowUpRight}
           variant="danger"
-          trend={{ text: '- Outflow Today', isPositive: false }}
         />
 
-        {/* 4. PEAK CROWD TODAY */}
         <KpiCard
           title="PEAK CROWD TODAY"
-          value={`${stats.peak_crowd} People`}
-          subtitle={`Recorded at ${stats.peak_time || 'N/A'}`}
-          icon={Award}
+          value={selectedPlace.peakCrowd.toLocaleString()}
+          subtitle={`Recorded at ${selectedPlace.peakTime}`}
+          icon={Trophy}
           variant="warning"
         />
       </div>
 
-      {/* ================================================== */}
-      {/* 7 & 8. LIVE CROWD STATUS & CAPACITY SECTION        */}
-      {/* ================================================== */}
+      {/* Live Crowd HUD Gauge & Capacity Card */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <LiveCrowdCard currentCrowd={currentCrowd} />
+          <LiveCrowdCard currentCrowd={selectedPlace.currentCount} />
         </div>
         <div className="lg:col-span-1">
-          <CapacityCard currentCrowd={currentCrowd} />
+          <CapacityCard currentCrowd={selectedPlace.currentCount} />
         </div>
       </div>
 
-      {/* ================================================== */}
-      {/* CREATIVE VENUE TOPOLOGY MAP                       */}
-      {/* ================================================== */}
-      <VenueMapCard gates={gates} cameras={cameras} currentCrowd={currentCrowd} />
+      {/* Zone-Wise Breakdown Card */}
+      <ZoneCrowdCard
+        zones={selectedPlace.zones}
+        placeName={selectedPlace.shortName}
+      />
 
-      {/* ================================================== */}
-      {/* 12 & 13. HOURLY TREND & ENTRY VS EXIT CHARTS       */}
-      {/* ================================================== */}
+      {/* Optical Spatial Topology Map */}
+      <VenueMapCard
+        gates={gates}
+        cameras={cameras}
+        currentCrowd={selectedPlace.currentCount}
+      />
+
+      {/* Trend & Entry/Exit Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <CrowdTrendChart data={history} title="Hourly Crowd Trend" />
-        <EntryExitChart data={history} title="Entry vs Exit Flow" />
+        <CrowdTrendChart data={history} />
+        <EntryExitChart data={history} />
       </div>
 
-      {/* ================================================== */}
-      {/* 17 & 18. GATE ANALYTICS & CAMERA STATUS            */}
-      {/* ================================================== */}
+      {/* Gate Analytics & Camera Health */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <GateAnalyticsCard gates={gates} />
@@ -146,15 +146,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveTab }) => {
         </div>
       </div>
 
-      {/* ================================================== */}
-      {/* 19. RECENT ANONYMOUS EVENTS STREAM                 */}
-      {/* ================================================== */}
-      <div>
-        <RecentEventsTable
-          events={recentEvents}
-          onViewAll={() => setActiveTab('events')}
-        />
-      </div>
+      {/* Recent Anonymous Events Table */}
+      <RecentEventsTable events={recentEvents} />
     </div>
   );
 };

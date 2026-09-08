@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { X, Zap, ArrowDownRight, ArrowUpRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { EventCreatePayload } from '../../types/crowd';
+import { usePlace } from '../../context/PlaceContext';
 
 interface SimulateEventModalProps {
   isOpen: boolean;
@@ -13,6 +14,8 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
   onClose,
   onSubmit,
 }) => {
+  const { selectedPlace, places, selectPlace, updatePlaceFlow } = usePlace();
+
   const [direction, setDirection] = useState<'entry' | 'exit'>('entry');
   const [gateId, setGateId] = useState<string>('GATE_1');
   const [cameraId, setCameraId] = useState<string>('ENTRY_01');
@@ -20,7 +23,6 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [statusMsg, setStatusMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -63,12 +65,14 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
       count: Number(count),
     });
 
+    updatePlaceFlow(selectedPlace.id, direction, Number(count));
+
     setIsSubmitting(false);
 
     if (success) {
       setStatusMsg({
         type: 'success',
-        text: `Detection event recorded! +${count} ${direction.toUpperCase()} dispatched to backend.`,
+        text: `Event recorded! +${count} ${direction.toUpperCase()} at ${selectedPlace.shortName}.`,
       });
       setTimeout(() => {
         setStatusMsg(null);
@@ -95,8 +99,12 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
               <Zap className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-slate-900 dark:text-slate-100">Simulate Camera Event</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Trigger simulated optical crossing detection</p>
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-slate-100">
+                Simulate Camera Event
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Trigger simulated optical crossing detection
+              </p>
             </div>
           </div>
           <button
@@ -107,7 +115,27 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-5 space-y-4 text-xs">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5 text-xs">
+          {/* Target Monitored Place */}
+          <div>
+            <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">
+              Target Place Location
+            </label>
+            <div className="relative">
+              <select
+                value={selectedPlace.id}
+                onChange={(e) => selectPlace(e.target.value)}
+                className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-slate-100 font-bold focus:border-cyan-500 focus:outline-none"
+              >
+                {places.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.city})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           {/* Direction Toggle */}
           <div>
             <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
@@ -145,12 +173,12 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
           {/* Gate Selection */}
           <div>
             <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">
-              Target Gate Location
+              Gate / Sensor Node
             </label>
             <select
               value={gateId}
               onChange={(e) => handleGateChange(e.target.value)}
-              className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-slate-100 font-medium focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3.5 py-2 text-slate-900 dark:text-slate-100 font-medium focus:border-cyan-500 focus:outline-none"
             >
               <option value="GATE_1">Gate 1 — Main Entrance & Ingress</option>
               <option value="GATE_2">Gate 2 — North Turnstiles</option>
@@ -158,23 +186,10 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
             </select>
           </div>
 
-          {/* Camera Node Identifier */}
-          <div>
-            <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1 uppercase tracking-wider text-[10px]">
-              Vision Node Identifier
-            </label>
-            <input
-              type="text"
-              value={cameraId}
-              onChange={(e) => setCameraId(e.target.value)}
-              className="w-full rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 px-3.5 py-2.5 text-slate-900 dark:text-slate-100 font-mono focus:border-cyan-500 focus:outline-none"
-            />
-          </div>
-
           {/* Person Count with Presets */}
           <div>
             <label className="block text-slate-500 dark:text-slate-400 font-bold mb-1.5 uppercase tracking-wider text-[10px]">
-              People Count ({count} {count === 1 ? 'Person' : 'People'})
+              Count ({count} {count === 1 ? 'Person' : 'People'})
             </label>
             <div className="grid grid-cols-5 gap-1.5 mb-2">
               {[1, 2, 5, 10, 25].map((n) => (
@@ -221,18 +236,18 @@ export const SimulateEventModal: React.FC<SimulateEventModalProps> = ({
           )}
 
           {/* Footer Actions */}
-          <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
+          <div className="pt-2 flex items-center justify-end gap-3 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold text-xs transition-colors"
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 font-semibold text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-md shadow-cyan-600/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold text-xs shadow-md shadow-cyan-600/20 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
             >
               {isSubmitting ? 'Ingesting Event...' : 'Dispatch Detection'}
             </button>
