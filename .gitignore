@@ -6,3 +6,4 @@ data/*.db
 *.pt
 test_images/
 crowd_data.db
+cloudflared.exe
