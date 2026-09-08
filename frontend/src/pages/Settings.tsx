@@ -1,5 +1,5 @@
-﻿import React, { useState } from 'react';
-import { Settings as SettingsIcon, Save, RotateCcw, ShieldCheck, Sun, Moon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Save, RotateCcw, ShieldCheck, Sun, Moon } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -43,14 +43,23 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
-      {/* Top Banner */}
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl p-5 shadow-md flex items-center justify-between transition-all duration-300">
-        <div className="flex items-center gap-2">
-          <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 shadow-sm">
-            <SettingsIcon className="h-5 w-5" />
+      {/* Top Banner with Official Brand Logo */}
+      <div className="rounded-3xl border border-teal-500/30 dark:border-teal-500/30 bg-white/90 dark:bg-[#0A1322]/90 backdrop-blur-xl p-6 shadow-xl shadow-teal-500/5 flex flex-col sm:flex-row items-center justify-between gap-4 transition-all duration-300">
+        <div className="flex items-center gap-4">
+          <div className="h-14 w-14 rounded-2xl overflow-hidden border border-teal-400/40 shadow-md shadow-teal-500/20 shrink-0 bg-[#081226]">
+            <img
+              src="/images/logo.jpg"
+              alt="CrowdSafe AI Logo"
+              className="h-full w-full object-cover object-center"
+            />
           </div>
           <div>
-            <h2 className="text-lg font-extrabold text-slate-900 dark:text-slate-100">System Configuration</h2>
+            <h2 className="text-lg font-black text-slate-900 dark:text-slate-100">
+              CrowdSafe AI System Configuration
+            </h2>
+            <p className="text-xs text-teal-700 dark:text-teal-400 font-bold">
+              Safer Communities. Smarter Tomorrow.
+            </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Configure Venue Limits, Density Thresholds & UI Preferences
             </p>

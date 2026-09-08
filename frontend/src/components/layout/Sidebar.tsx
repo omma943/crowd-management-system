@@ -7,7 +7,6 @@ import {
   BarChart3,
   AlertTriangle,
   Settings,
-  Shield,
   MapPin,
   Camera,
 } from 'lucide-react';
@@ -66,15 +65,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Top Branding & Place Pill */}
         <div className="p-4 space-y-4">
           <div className="flex items-center gap-3 px-2 py-1">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 text-white shadow-md shadow-teal-500/30">
-              <Shield className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl overflow-hidden border border-teal-400/40 shadow-md shadow-teal-500/25 bg-[#081226] shrink-0">
+              <img
+                src="/images/logo.jpg"
+                alt="CrowdSafe AI Logo"
+                className="h-full w-full object-cover object-center"
+              />
             </div>
             <div>
               <h2 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
                 CrowdSafe AI
               </h2>
-              <p className="text-[10px] text-teal-600 dark:text-teal-400 font-bold">
-                Real-Time Safety & Density
+              <p className="text-[10px] text-teal-600 dark:text-teal-400 font-bold tracking-tight">
+                Safer Communities. Smarter Tomorrow.
               </p>
             </div>
           </div>

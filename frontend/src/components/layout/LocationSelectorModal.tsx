@@ -1,5 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
-import { X, Search, MapPin, Users, Check, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Search, Users, Check, ChevronRight } from 'lucide-react';
 import { usePlace } from '../../context/PlaceContext';
 import type { PlaceCategory } from '../../types/place';
 
@@ -76,15 +76,19 @@ export const LocationSelectorModal: React.FC = () => {
       >
         {/* Header */}
         <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20">
-              <MapPin className="h-5 w-5" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl overflow-hidden border border-teal-400/40 shadow-md shadow-teal-500/20 bg-[#081226] shrink-0">
+              <img
+                src="/images/logo.jpg"
+                alt="CrowdSafe AI Logo"
+                className="h-full w-full object-cover object-center"
+              />
             </div>
             <div>
               <h3 className="text-base font-black text-slate-900 dark:text-slate-100">
                 SELECT MONITORED LOCATION
               </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-teal-600 dark:text-teal-400 font-medium">
                 Choose a temple, fort, or pilgrimage site to view live occupancy
               </p>
             </div>

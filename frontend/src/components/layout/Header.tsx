@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   RefreshCw,
-  Activity,
   PlusCircle,
   Sun,
   Moon,
@@ -78,11 +77,15 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Logo */}
           <div
             onClick={onNavigateHome}
-            className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group shrink-0"
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group shrink-0"
           >
-            <div className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 text-white shadow-md shadow-teal-500/30 group-hover:scale-105 transition-transform">
-              <Activity className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+            <div className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl overflow-hidden border border-teal-400/40 shadow-md shadow-teal-500/30 group-hover:scale-105 transition-transform bg-[#081226]">
+              <img
+                src="/images/logo.jpg"
+                alt="CrowdSafe AI Logo"
+                className="h-full w-full object-cover object-center"
+              />
+              <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
               </span>
@@ -93,8 +96,8 @@ export const Header: React.FC<HeaderProps> = ({
                   CrowdSafe AI
                 </span>
               </div>
-              <p className="text-[10px] text-slate-400 font-medium">
-                Know the crowd. Plan your visit.
+              <p className="text-[10px] text-teal-600 dark:text-teal-400 font-bold tracking-tight">
+                Safer Communities. Smarter Tomorrow.
               </p>
             </div>
           </div>
