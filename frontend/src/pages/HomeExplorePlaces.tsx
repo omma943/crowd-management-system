@@ -5,7 +5,6 @@ import {
   Users,
   ArrowRight,
   ShieldCheck,
-  Sparkles,
   TrendingUp,
   Clock,
   Compass,
@@ -79,25 +78,26 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
 
   return (
     <div className="space-y-8 pb-12">
-      {/* Hero Banner with Official CrowdSafe AI Artwork */}
+      {/* Hero Banner with Official CrowdSafe AI Artwork (Properly Fitted) */}
       <div className="space-y-6">
-        <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-900 shadow-xl group">
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-teal-500/30 dark:border-teal-400/30 bg-gradient-to-r from-[#031525] via-[#08223a] to-[#041a2e] shadow-2xl shadow-teal-500/15 group">
           <img
             src="/images/crowdsafe-banner.png"
             alt="CrowdSafe AI - Safer Crowds, Smarter Tomorrow"
-            className="w-full h-auto max-h-[360px] object-cover sm:object-contain object-center transition-transform duration-700 group-hover:scale-[1.01]"
+            className="w-full h-auto block select-none transition-transform duration-500 group-hover:scale-[1.008]"
+            style={{ aspectRatio: '1024 / 384' }}
           />
-          {/* Subtle Ambient Glow Effect */}
-          <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl pointer-events-none" />
+          {/* Subtle Ambient Neon Rim */}
+          <div className="absolute inset-0 ring-1 ring-inset ring-teal-400/20 rounded-2xl sm:rounded-3xl pointer-events-none" />
         </div>
 
-        {/* Search & Category Filter Section */}
-        <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm space-y-4">
+        {/* Search & Category Filter Section with Vibrant Eye-Catching Theme */}
+        <div className="p-6 sm:p-8 rounded-3xl border border-teal-500/20 dark:border-teal-500/30 bg-white/95 dark:bg-[#0A1322]/90 backdrop-blur-xl shadow-xl shadow-teal-500/5 space-y-4">
           <div className="text-center max-w-xl mx-auto space-y-1">
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-slate-100">
               Explore Pilgrimage & Heritage Sites
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+            <p className="text-xs sm:text-sm text-teal-700 dark:text-teal-400 font-medium">
               Real-time crowd density, safety alerts, and AI forecast across Maharashtra
             </p>
           </div>
@@ -105,18 +105,18 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
           {/* Search Bar */}
           <div className="max-w-xl mx-auto">
             <div className="relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-cyan-500 transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-teal-500 group-focus-within:text-emerald-500 transition-colors" />
               <input
                 type="text"
                 placeholder="🔍 Search temples, historic forts, cities, or areas..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-inner focus:border-cyan-500 focus:outline-none focus:ring-4 focus:ring-cyan-500/10 transition-all font-medium"
+                className="w-full rounded-2xl bg-teal-50/50 dark:bg-slate-950 border border-teal-200 dark:border-teal-800/80 pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 shadow-inner focus:border-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-500/20 transition-all font-medium"
               />
             </div>
           </div>
 
-          {/* Category Filter Chips */}
+          {/* Category Filter Chips with Vibrant Emerald & Cyan Active State */}
           <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
             {[
               { id: 'All', label: '🌟 All Places' },
@@ -128,8 +128,8 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                 onClick={() => setCategoryFilter(cat.id as PlaceCategory | 'All')}
                 className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                   categoryFilter === cat.id
-                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md scale-105'
-                    : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700/60 hover:border-slate-300'
+                    ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/30 scale-105 border border-teal-300/40'
+                    : 'bg-teal-500/10 dark:bg-slate-800/80 text-teal-800 dark:text-teal-300 border border-teal-500/20 dark:border-teal-700/50 hover:border-teal-400'
                 }`}
               >
                 {cat.label}
@@ -222,7 +222,7 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
               <div
                 key={place.id}
                 onClick={() => handlePlaceClick(place.id)}
-                className="group relative rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden shadow-sm hover:shadow-xl hover:border-cyan-500/50 transition-all duration-300 cursor-pointer flex flex-col justify-between"
+                className="group relative rounded-3xl border border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#0A1322] overflow-hidden shadow-md hover:shadow-2xl hover:shadow-teal-500/15 hover:border-teal-400/60 dark:hover:border-teal-400/60 transition-all duration-300 cursor-pointer flex flex-col justify-between"
               >
                 <div>
                   {/* Place Image */}
@@ -232,7 +232,7 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                       alt={place.name}
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
 
                     {/* Category & Status Badges */}
                     <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
@@ -254,8 +254,8 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                       <h3 className="text-base font-black leading-tight drop-shadow-sm">
                         {place.shortName}
                       </h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-200 mt-1 font-medium">
-                        <MapPin className="h-3.5 w-3.5 text-cyan-400" />
+                      <div className="flex items-center gap-1 text-xs text-teal-300 mt-1 font-medium">
+                        <MapPin className="h-3.5 w-3.5 text-teal-400" />
                         <span>{place.city}</span>
                       </div>
                     </div>
@@ -269,7 +269,7 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                           Current Crowd
                         </div>
                         <div className="flex items-center gap-1.5 text-xl font-black font-mono text-slate-900 dark:text-slate-100">
-                          <Users className="h-4 w-4 text-cyan-500" />
+                          <Users className="h-4 w-4 text-teal-500" />
                           <span>{place.currentCount.toLocaleString()}</span>
                           <span className="text-xs font-normal text-slate-400">
                             people
@@ -289,16 +289,16 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
 
                     {/* Progress Bar */}
                     <div>
-                      <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                      <div className="h-2.5 w-full rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden p-0.5">
                         <div
-                          className={`h-full rounded-full transition-all duration-700 ${barClass}`}
+                          className={`h-full rounded-full transition-all duration-700 shadow-sm ${barClass}`}
                           style={{ width: `${Math.min(100, occupancyPct)}%` }}
                         />
                       </div>
                     </div>
 
                     {/* Recommended visit time pill */}
-                    <div className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-400 bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800/80">
+                    <div className="flex items-center gap-2 text-[11px] text-teal-900 dark:text-teal-300 bg-teal-50/70 dark:bg-slate-950 p-2.5 rounded-2xl border border-teal-100 dark:border-teal-900/60">
                       <Clock className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
                       <span className="truncate font-medium">
                         {place.recommendedVisitTime}
@@ -311,10 +311,10 @@ export const HomeExplorePlaces: React.FC<HomeExplorePlacesProps> = ({
                 <div className="px-5 pb-5 pt-0">
                   <button
                     type="button"
-                    className="w-full py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 dark:hover:text-white text-slate-900 dark:text-slate-100 font-bold text-xs transition-all flex items-center justify-center gap-2 group-hover:bg-cyan-500 group-hover:text-white shadow-sm"
+                    className="w-full py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-black text-xs transition-all flex items-center justify-center gap-2 shadow-md shadow-teal-500/25 group-hover:scale-[1.02] group-hover:shadow-lg group-hover:shadow-teal-500/40 active:scale-95"
                   >
-                    <span>View Details</span>
-                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                    <span>View Live Intelligence</span>
+                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1.5 transition-transform" />
                   </button>
                 </div>
               </div>

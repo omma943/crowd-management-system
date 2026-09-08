@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Home, Users, Gauge, LifeBuoy, AlertTriangle } from 'lucide-react';
 import type { NavItem } from './Sidebar';
 import { usePlace } from '../../context/PlaceContext';
@@ -47,12 +47,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             onClick={() => onSelectTab(btn.id)}
             className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-2xl min-w-[58px] transition-all ${
               isActive
-                ? 'text-cyan-600 dark:text-cyan-400 font-black'
+                ? 'text-teal-600 dark:text-teal-400 font-black'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 font-medium'
             }`}
           >
             {isActive && (
-              <span className="absolute -top-1 w-6 h-1 rounded-full bg-cyan-500 shadow-sm shadow-cyan-500/50" />
+              <span className="absolute -top-1 w-7 h-1 rounded-full bg-gradient-to-r from-emerald-400 to-teal-400 shadow-sm shadow-teal-400/60" />
             )}
 
             <div className="relative p-0.5">

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Home,
   Users,
@@ -66,14 +66,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Top Branding & Place Pill */}
         <div className="p-4 space-y-4">
           <div className="flex items-center gap-3 px-2 py-1">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-cyan-600 to-blue-600 text-white shadow-md shadow-cyan-500/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 text-white shadow-md shadow-teal-500/30">
               <Shield className="h-5 w-5" />
             </div>
             <div>
               <h2 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
                 CrowdSafe AI
               </h2>
-              <p className="text-[10px] text-slate-400 font-medium">
+              <p className="text-[10px] text-teal-600 dark:text-teal-400 font-bold">
                 Real-Time Safety & Density
               </p>
             </div>
@@ -82,9 +82,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Active Monitored Place Quick Widget */}
           <div
             onClick={() => setIsLocationModalOpen(true)}
-            className="p-3 rounded-2xl border border-cyan-500/30 bg-cyan-500/5 dark:bg-cyan-500/10 hover:border-cyan-500/60 transition-all cursor-pointer group"
+            className="p-3 rounded-2xl border border-teal-500/30 bg-teal-500/5 dark:bg-teal-500/10 hover:border-teal-400 transition-all cursor-pointer group shadow-sm"
           >
-            <div className="flex items-center justify-between text-[10px] font-mono font-bold text-cyan-600 dark:text-cyan-400 mb-1">
+            <div className="flex items-center justify-between text-[10px] font-mono font-bold text-teal-600 dark:text-teal-400 mb-1">
               <span className="flex items-center gap-1">
                 <MapPin className="h-3 w-3" /> ACTIVE PLACE
               </span>
@@ -95,7 +95,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <div className="mt-1 flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400">
               <span>{selectedPlace.currentCount.toLocaleString()} inside</span>
-              <span className="font-bold text-cyan-600 dark:text-cyan-400">
+              <span className="font-bold text-teal-600 dark:text-teal-400">
                 {Math.round((selectedPlace.currentCount / selectedPlace.baseCapacity) * 100)}%
               </span>
             </div>
@@ -116,8 +116,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   }}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
                     isActive
-                      ? 'bg-cyan-500 text-white shadow-md shadow-cyan-500/25 font-black'
-                      : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100'
+                      ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white shadow-lg shadow-teal-500/30 font-black'
+                      : 'text-slate-600 dark:text-slate-400 hover:bg-teal-50 dark:hover:bg-slate-800/60 hover:text-teal-700 dark:hover:text-teal-300'
                   }`}
                 >
                   <div className="flex items-center gap-3">
